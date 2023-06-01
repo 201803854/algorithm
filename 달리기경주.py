@@ -1,7 +1,14 @@
-echo "# algorithm" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/201803854/algorithm.git
-git push -u origin main
+def solution(players, callings):
+    answer = []
+    hashmap = dict()
+    for i,v in enumerate(players):
+        hashmap[v] = i 
+    for call in callings:
+        pre,post = hashmap[call] - 1,hashmap[call]
+        hashmap[players[pre]] = post
+        hashmap[players[post]] = pre
+        players[pre],players[post] = players[post],players[pre]
+    return players        
+
+        
+  https://school.programmers.co.kr/learn/courses/30/lessons/178871#qna
