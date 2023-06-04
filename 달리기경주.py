@@ -10,4 +10,4 @@ def solution(players, callings):
         players[pre],players[post] = players[post],players[pre]
     return players        
     
-    
+     
