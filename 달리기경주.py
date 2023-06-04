@@ -9,4 +9,5 @@ def solution(players, callings):
         hashmap[players[post]] = pre
         players[pre],players[post] = players[post],players[pre]
     return players        
-        
+    
+    
