@@ -1,0 +1,22 @@
+def solution(s):
+    answer = ''
+    flag = True  # 단어의 시작을 나타내는 플래그입니다.
+    index = 0  # 현재 인덱스를 추적하는 변수입니다.
+
+    for letter in s:
+        if letter == ' ':  # 공백인 경우
+            answer += ' '
+            flag = True  # 단어의 시작을 나타내는 플래그를 True로 설정합니다.
+        else:
+            if flag:  # 새로운 단어의 시작인 경우
+                answer += letter.upper()  # 대문자로 변환
+                flag = False  # 플래그를 False로 설정해 단어의 시작이 아니라는 것을 나타냅니다.
+                index = 1  # 인덱스를 1로 설정합니다.
+            else:  # 단어의 중간 또는 마지막인 경우
+                if index % 2 == 0:  # 인덱스가 짝수인 경우
+                    answer += letter.upper()  # 대문자로 변환
+                else:  # 인덱스가 홀수인 경우
+                    answer += letter.lower()  # 소문자로 변환
+                index += 1  # 인덱스를 1 증가시킵니다.
+
+    return answer
