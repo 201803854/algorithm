@@ -1,0 +1,15 @@
+def solution(n, m):
+    answer = []
+    M=m
+    N=n
+    while True :
+        
+        if M % N == 0 :
+            answer.append(N)
+            break
+        else :
+            temp = M
+            M = N
+            N = temp % N
+    answer.append(n*m/answer[0])
+    return answer
