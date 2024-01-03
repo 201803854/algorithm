@@ -1,0 +1,5 @@
+def solution(n):
+    temp = list(str(n))  # 입력받은 숫자 n을 문자열로 변환하고, 그 문자열을 리스트로 만듭니다.
+    temp = list(map(int, temp))  # 리스트의 각 요소를 정수로 변환합니다.
+    temp.reverse()  # 리스트를 역순으로 변환합니다.
+    return temp  # 정렬된 리스트를 반환합니다.
