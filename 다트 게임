@@ -1,0 +1,25 @@
+def solution(dartResult):  # 다트 게임의 결과를 나타내는 문자열을 매개변수로 받는 함수입니다.
+    answer = 0  # 최종 점수를 저장할 변수를 초기화합니다.
+    score_list = []  # 각 시도의 점수를 저장할 리스트를 생성합니다.
+
+    for k,i in enumerate(dartResult) :  # 다트 결과 문자열을 순차적으로 탐색합니다.
+        if i == 'S' :  # 단일 점수를 나타내는 경우
+            if int(dartResult[k-1]) == 0 :  # 바로 이전 문자가 '0'인 경우
+                if dartResult[k-2] == '1' :  # 두 번째 이전 문자가 '1'인 경우, 즉 '10'인 경우
+                    score_list.append(10)  # 점수 10을 리스트에 추가합니다.
+                else :
+                    score_list.append(0)  # 그렇지 않으면 점수 0을 리스트에 추가합니다.
+            else:
+                score_list.append(int(dartResult[k-1]))  # 이전 문자를 정수로 변환하여 리스트에 추가합니다.
+        if i == 'D' :  # 더블 점수를 나타내는 경우
+            # 위와 동일한 로직으로 점수를 계산하되, 점수를 제곱합니다.
+        if i == 'T' :  # 트리플 점수를 나타내는 경우
+            # 위와 동일한 로직으로 점수를 계산하되, 점수를 세제곱합니다.
+        if i == '*' :  # 스타상을 나타내는 경우
+            score_list[-2:] = list(map(lambda x : x*2 ,score_list[-2:]))  # 리스트의 마지막 두 원소를 두 배로 합니다.
+        if i == '#' :  # 아차상을 나타내는 경우
+            score_list[-1:] = list(map(lambda x : x*-1 ,score_list[-1:]))  # 리스트의 마지막 원소를 음수로 바꿉니다.
+
+    answer = sum(score_list)  # 리스트의 모든 원소를 더하여 최종 점수를 계산합니다.
+
+    return answer  # 최종 점수를 반환합니다.
