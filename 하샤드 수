@@ -1,0 +1,10 @@
+def solution(x):  # x는 검사할 정수입니다.
+    answer = True  # 결과를 저장할 변수로, 초기값은 True입니다.
+    temp = list(str(x))  # x를 문자열로 변환한 후 각 자릿수를 원소로 하는 리스트를 생성합니다.
+    temp = list(map(int,temp))  # 리스트의 각 원소를 정수로 변환합니다.
+    print(temp)  # 변환된 리스트를 출력합니다.
+    if x % sum(temp) == 0 :  # x가 리스트의 모든 원소의 합으로 나누어 떨어지면,
+        answer = True  # answer를 True로 설정합니다.
+    else :  # x가 리스트의 모든 원소의 합으로 나누어 떨어지지 않으면,
+        answer = False  # answer를 False로 설정합니다.
+    return answer  # answer를 반환합니다.
