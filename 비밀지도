@@ -1,0 +1,13 @@
+def solution(n, arr1, arr2):  # n은 정사각형의 크기, arr1과 arr2는 정수 리스트입니다.
+    answer = []  # 결과를 저장할 빈 리스트를 생성합니다.
+
+    # arr1과 arr2의 각 원소를 순차적으로 처리합니다.
+    for i, j in zip(arr1, arr2):
+        # i와 j를 OR 연산한 후, 이를 이진수로 변환합니다.
+        # 이진수 변환 결과에서 '0b'를 제거하고(n을 기준으로 앞부분을 0으로 채워줍니다.), 1은 '#'으로, 0은 ' '으로 변환합니다.
+        row = bin(i | j)[2:].zfill(n).replace('1', '#').replace('0', ' ')
+
+        # 변환된 결과를 answer 리스트에 추가합니다.
+        answer.append(row)
+
+    return answer  # 결과 리스트를 반환합니다.
