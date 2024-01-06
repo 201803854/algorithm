@@ -1,0 +1,48 @@
+from collections import deque
+
+def solution(land):
+    n = len(land)
+    m = len(land[0])
+
+    def BFS(x, y,cor):
+        queue = deque()
+        queue.append([x, y])
+        land[x][y] = 0  # 방문한 위치의 값을 0으로 변경
+        count = 1
+        
+        while queue:
+            
+            cur_x, cur_y = queue.popleft()
+            cor.append(cur_y)
+            # 현재 위치에서 상하좌우 탐색
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nx = cur_x + dx
+                ny = cur_y + dy
+
+                if 0 <= nx < n and 0 <= ny < m and land[nx][ny] == 1:
+                    queue.append([nx, ny])
+                    land[nx][ny] = 0  # 방문한 위치의 값을 0으로 변경
+                    count += 1
+
+        return count
+
+    answer = 0
+    cor = []
+    answer_list = []
+    for i in range(n):
+        for j in range(m):
+            if land[i][j] == 1:
+                count = BFS(i, j,cor)
+                answer_list.append(cor)
+                cor = []
+    final = {}
+    for answer in answer_list :
+        temp = len(answer)
+        for i in set(answer) :
+            try :
+                final[i] += temp
+            except :
+                final[i] = temp
+    
+    return max(final.values())
+    
