@@ -1,0 +1,47 @@
+def solution(edges):
+    nodes = set()  # 정점 집합을 저장할 변수
+    graph = {}  # 인접 리스트 형태의 그래프를 저장할 변수
+
+    for x, y in edges:
+        nodes.add(x)
+        nodes.add(y)
+        if x not in graph:
+            graph[x] = []
+        graph[x].append(y)  # 각 정점과 연결된 정점들을 인접 리스트에 추가
+
+    n = len(nodes)  # 정점 개수
+    edgeout = [0] * n  # 각 정점에서 나가는 간선 수를 저장할 리스트
+    edgein = [0] * n  # 각 정점으로 들어오는 간선 수를 저장할 리스트
+    INF = 1000000 * n  # 무한대 값
+    answer = []  # 결과를 저장할 리스트
+    
+    # 각 정점의 나가는 간선 수와 들어오는 간선 수 계산
+    for x in graph:
+        for y in graph[x]:
+            edgeout[x-1] += 1
+            edgein[y-1] += 1
+
+    position = 0  # 결과 변수 중 하나인 position 값
+    total = 0  # 결과 변수 중 하나인 total 값
+    temp = 0  # 임시 변수
+    donut, stick, eight = 0, 0, 0  # 결과 변수 중 나머지 값들
+    
+    # 각 정점의 나가는 간선 수와 들어오는 간선 수를 비교하면서 결과 값 계산
+    for i, j in zip(edgeout, edgein):
+        temp += 1
+        if j == 0 and i >= 2:
+            total = i
+            position = temp
+            
+        if i == 0 :
+            stick += 1
+        if i >= 2 and j >= 2:
+            eight += 1
+
+    donut = total - eight - stick
+
+    answer.append(position)
+    answer.append(donut)
+    answer.append(stick)
+    answer.append(eight)
+    return answer
