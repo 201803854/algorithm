@@ -1,0 +1,8 @@
+def solution(arr1, arr2):
+    answer = []
+    for i in range(len(arr1)):  # arr1의 행 수만큼 반복
+        temp = []  # 각 행의 결과를 저장할 임시 리스트
+        for j in range(len(arr1[i])):  # arr1의 각 행의 열 수만큼 반복
+            temp.append(arr1[i][j] + arr2[i][j])  # arr1과 arr2의 같은 위치의 원소를 더하여 temp에 추가
+        answer.append(temp)  # 계산된 행을 answer에 추가
+    return answer  # 행렬 덧셈 결과 반환
