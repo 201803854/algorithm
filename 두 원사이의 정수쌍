@@ -1,0 +1,22 @@
+import math
+def solution(r1, r2):
+    # dot 함수는 주어진 반지름 r에 대해 원 내부의 점의 수를 계산합니다.
+    def dot(r):
+        dot_num = 0  # 원 내부의 점의 수를 저장합니다.
+        # x를 -r부터 r까지 반복하면서 y의 최대값을 계산합니다.
+        for x in range(-r, r+1):
+            # y의 최대값은 원의 방정식에서 유도됩니다.
+            y_max = math.floor(math.sqrt(math.pow(r,2) -math.pow(x,2)))
+            # 반지름이 r1인 원의 테두리에 있는 점들을 제외합니다.
+            if r == r1 :
+                # 원의 방정식을 만족하는 y의 값이 정수일 경우 그 점은 원의 테두리에 있습니다.
+                if math.sqrt(math.pow(r,2) -math.pow(x,2)) == y_max and x != r1 :
+                    dot_num -= 1  # 테두리에 있는 점을 제외합니다.
+                
+            dot_num += y_max  # y의 최대값을 원 내부의 점의 수에 더합니다.
+            
+        return dot_num * 2 + 2*r + 1  # 원의 내부 점의 수를 반환합니다.
+
+    # 반지름이 r2인 원에서 반지름이 r1인 원의 점의 수를 뺍니다.
+    answer = dot(r2) - dot(r1)
+    return answer  # 결과를 반환합니다.
