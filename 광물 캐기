@@ -1,0 +1,56 @@
+def solution(picks, minerals):
+    # 총 광물 가치를 저장할 변수
+    answer = 0
+
+    # 각 턴별 광물의 개수를 저장할 딕셔너리
+    result = {}
+    
+    # 광물의 총 개수
+    n = len(minerals)
+    
+    # 5턴마다 광물을 채굴
+    for i in range(0, n, 5):
+        # 해당 턴의 광물 개수를 저장할 딕셔너리
+        how = {}
+        
+        # 만약 현재 턴 수가 곡괭이 수보다 많다면 루프 종료
+        if int((i+5)/5) > sum(picks):
+            break
+
+        # 해당 턴의 광물을 채굴
+        for mineral in minerals[i:i+5]:
+            # 각 광물의 개수를 카운트
+            how[mineral] = how.get(mineral, 0) + 1
+
+        # 턴별 광물 개수를 저장
+        result[int((i+5)/5)] = how
+
+    # 각 턴의 광물 가치를 계산할 리스트
+    cost = []
+    
+    # 각 턴의 광물 가치를 계산
+    for i in range(1, len(result) + 1):
+        # 다이아몬드, 돌, 철의 가치를 계산
+        diamond = result[i].get('diamond', 0) + result[i].get('stone', 0) + result[i].get('iron', 0)
+        iron = result[i].get('diamond', 0) * 5 + result[i].get('stone', 0) + result[i].get('iron', 0)
+        stone = result[i].get('diamond', 0) * 25 + result[i].get('stone', 0) + result[i].get('iron', 0) * 5
+        
+        # 각 턴의 광물 가치를 저장
+        cost.append([diamond, iron, stone])
+    
+    # 돌의 가치를 기준으로 내림차순 정렬
+    cost.sort(key=lambda x: x[2], reverse=True)
+    
+    # 각 곡괭이로 광물을 채굴
+    for mineral, i in enumerate(picks):
+        # 해당 곡괭이로 채굴 가능하고, 아직 채굴할 광물이 남아있다면
+        while i > 0 and cost:
+            # 해당 곡괭이로 광물을 채굴하고, 총 가치를 더함
+            answer += cost[0][mineral]
+            # 곡괭이 사용 횟수 감소
+            i -= 1
+            # 채굴한 광물 제거
+            cost.pop(0)
+
+    # 총 광물 가치 반환
+    return answer
