@@ -1,0 +1,53 @@
+from collections import deque
+
+def solution(board):
+    # 보드의 크기
+    n = len(board)
+    m = len(board[0])
+    
+    # 이동 방향 (상, 하, 좌, 우)
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    
+    # 시작 위치와 목표 위치 찾기
+    start_x, start_y = None, None
+    goal_x, goal_y = None, None
+    for i in range(n):
+        for j in range(m):
+            if board[i][j] == 'R':
+                start_x, start_y = i, j
+            elif board[i][j] == 'G':
+                goal_x, goal_y = i, j
+    
+    # 방문 여부를 저장하는 visited 배열
+    visited = [[False] * m for _ in range(n)]
+    
+    # BFS를 위한 큐
+    queue = deque()
+    queue.append((start_x, start_y, 0))  # (x, y, 이동 횟수)
+    visited[start_x][start_y] = True
+    
+    # BFS 수행
+    while queue:
+        x, y, count = queue.popleft()
+        
+        # 목표 위치에 도달한 경우 최단 경로 찾음
+        if x == goal_x and y == goal_y:
+            return count
+        
+        # 인접한 위치들을 확인하며 이동 가능한 위치를 큐에 추가
+        for i in range(4):
+            nx = x +dx[i]
+            ny = y +dy[i]
+            while 0 <= nx < n and 0 <= ny < m and board[nx][ny] != 'D':
+                nx += dx[i]
+                ny += dy[i]
+            nx -= dx[i]
+            ny -= dy[i]
+            
+            if 0 <= nx < n and 0 <= ny < m and not visited[nx][ny]:
+                queue.append((nx, ny, count + 1))
+                visited[nx][ny] = True
+
+    # 목표 위치에 도달할 수 없는 경우
+    return -1
