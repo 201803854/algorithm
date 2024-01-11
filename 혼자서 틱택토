@@ -1,0 +1,78 @@
+def solution(board):
+    
+    # 변수 초기화
+    end = 0
+    O_count = 0
+    X_count = 0
+    temp_x = 0
+    temp_y = 0
+    temp_z = 0 
+    X_end = 0
+
+    # 대각선(왼쪽 상단에서 오른쪽 하단)과 각 행의 'O'와 'X'의 갯수를 세는 과정
+    for i,x in enumerate(board):
+        if x[i] == board[0][0] and board[0][0] != '.':
+            temp_x += 1
+            if temp_x == 3 and x[i] =='X':
+                X_end += 1
+        else:
+            temp_x = 0
+        for j,y in enumerate(x):
+            if y == 'O':
+                O_count += 1
+            if y == 'X':
+                X_count += 1
+
+    # 대각선(오른쪽 상단에서 왼쪽 하단)을 세는 과정
+    for i,x in enumerate(board):
+        if x[len(x)-1-i] == board[0][len(x)-1] and board[0][len(x)-1] != '.':
+            temp_y += 1
+            if temp_y == 3 and board[0][len(x)-1] == 'X':
+                X_end +=1
+        else:
+            temp_y = 0
+            break
+
+    # 각 열을 세는 과정
+    for i in range(3):
+        for j in range(3):
+            if board[0][i] == board[j][i] and board[0][i] != '.':
+                temp_z += 1
+                if temp_z == len(x):
+                    if board[0][i] == 'X':
+                        X_end += 1
+                    end += 1 
+                temp_z = 0
+            else:
+                temp_z = 0
+
+    # 대각선의 결과를 end에 반영
+    if temp_x == 3:
+        end += 1
+    if temp_y == 3:
+        end += 1
+
+    # 각 행의 결과를 end에 반영
+    for i in board:
+        if len(set(i)) == 1 and i[0] != '.':
+            if i[0] == 'X':
+                X_end += 1
+            end += 1
+    
+    # 게임 결과 판단
+    if end > 1:
+        if O_count == 5 and X_count == 4 and X_end ==0:
+            return 1
+        else: 
+            return 0
+    elif end == 1:
+        if X_end == 1 and X_count == O_count:
+            return 1
+        elif X_end == 0 and O_count == X_count+1:
+            return 1
+        else:
+            return 0
+    elif O_count > X_count +1 or X_count > O_count:
+        return 0
+    else:
+        return 1
