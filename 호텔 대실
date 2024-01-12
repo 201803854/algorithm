@@ -1,0 +1,37 @@
+def solution(book_time):
+    answer = 0
+    room = []
+    # 시간을 분단위로 변환하는 함수
+    def convert(time) :
+        convert_time = time.split(':')
+        return int(convert_time[0]) * 60 + int(convert_time[1])
+    # book_time의 모든 시간을 분단위로 변환
+    for i in range(len(book_time)) :
+        book_time[i][0] = convert(book_time[i][0])
+        book_time[i][1] = convert(book_time[i][1])
+    # 시작 시간을 기준으로 정렬
+    book_time.sort(key = lambda x : x[0])
+    # 첫 번째 예약을 room에 추가
+    room.append(book_time[0])
+    # 두 번째 예약부터 처리 시작
+    for i in book_time[1:] :
+        need_room = 0
+        # 모든 방에 대해
+        for j in range(len(room)) :
+            # 만약 현재 방의 마지막 예약이 다음 예약 시작시간보다 늦다면
+            if room[j][-1]+10 > i[0] :
+                # 새로운 방이 필요하다고 표시
+                need_room = 1
+            else :
+                # 현재 방에 예약을 추가하고, 더 이상 새로운 방이 필요하지 않다고 표시 후 반복 종료
+                print(room[j],i)
+                room[j].extend(i)
+                need_room = 0
+                break
+        # 모든 방을 확인한 후에도 새로운 방이 필요하다면 새로운 방에 예약 추가
+        if need_room :
+            room.append(i)
+    # 모든 예약이 끝난 후의 방 상태 출력
+    print(room)
+    # 필요한 방의 개수 반환
+    return len(room)
