@@ -1,0 +1,14 @@
+def solution(numbers):
+    answer = [-1] * len(numbers)
+    stack = []
+
+    for i in range(len(numbers)):
+        # 스택이 비어있지 않고, 스택의 맨 위에 있는 수가 현재 수보다 작다면
+        while stack and (numbers[stack[-1]] < numbers[i]):
+            # 스택의 맨 위에 있는 수가 현재 수보다 클 때까지 스택에서 제거하면서
+            # 현재 수를 해당 인덱스의 결과값으로 저장
+            answer[stack.pop()] = numbers[i]
+        # 현재 인덱스를 스택에 추가
+        stack.append(i)
+
+    return answer
