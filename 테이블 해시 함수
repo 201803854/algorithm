@@ -1,0 +1,30 @@
+def solution(data, col, row_begin, row_end):
+    # 결과를 저장할 빈 리스트를 만듭니다.
+    answer = []
+
+    # data를 주어진 열(col)의 값으로 정렬하되, 같은 값이 나오면 첫 번째 열의 값에 대해 내림차순으로 정렬합니다.
+    data.sort(key = lambda x : (x[col-1],-x[0]))
+
+    # row_begin부터 row_end까지의 행에 대해 반복합니다.
+    for i in range(row_begin, row_end+1) :
+        # 각 행에 대한 합계를 0으로 초기화합니다.
+        S = 0
+
+        # 현재 행의 각 열에 대해 반복합니다.
+        for j in data[i-1] :
+            # 각 열의 값에 대해 현재 행 번호(i)로 나눈 나머지를 합계에 더합니다.
+            S += j%i
+
+        # 계산된 합계를 결과 리스트에 추가합니다.
+        answer.append(S)
+
+    # 결과 리스트의 첫 번째 값을 임시 변수에 저장합니다.
+    temp = answer[0]
+
+    # 결과 리스트의 두 번째 값부터 마지막 값까지 반복합니다.
+    for i in answer[1:] :
+        # 임시 변수와 현재 값을 XOR 연산한 결과를 임시 변수에 저장합니다.
+        temp = temp^i
+
+    # 최종 계산된 값을 반환합니다.
+    return temp
