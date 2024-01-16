@@ -1,27 +1,54 @@
-def solution(k, tangerine):
-    answer = 0 # 최종 결과를 저장할 변수 초기화
-    dic = {} # 딕셔너리 초기화
+def solution(arrayA, arrayB):
+    # 최대공약수를 구하는 함수
+    def gcd(x,y) :
+        while x%y != 0 :
+            temp = x%y
+            x = y
+            y = temp
+        return y
 
-    # tangerine 리스트의 각 요소에 대해 반복
-    for i in tangerine :
-        try :
-            # 해당 요소가 딕셔너리에 이미 있으면, 해당 키의 값을 1 증가
-            dic[i] += 1
-        except :
-            # 해당 요소가 딕셔너리에 없으면, 새로운 키-값 쌍을 생성 (키 : 요소, 값 : 1)
-            dic[i] = 1
+    # 초기값 설정
+    answer = 0 
+    pivot_a = 0
+    pivot_b = 0
+    divide_A = float("inf")
+    divide_B = float("inf")
 
-    # 딕셔너리의 값들을 내림차순으로 정렬
-    dic = sorted(dic.values(),reverse = True)
+    # arrayA의 모든 요소의 최대공약수를 구함
+    if len(arrayA) == 1 :
+        divide_A = arrayA[0]
+    else :
+        for i in range(1,len(arrayA)) :
+            divide_A = min(divide_A,gcd(arrayA[i-1],arrayA[i]))
 
-    # 정렬된 딕셔너리의 값들에 대해 반복
-    for i in range(len(dic)) :
-        # k가 0 이하이면 반복문 종료
-        if k <= 0 :
+    # arrayB의 모든 요소의 최대공약수를 구함
+    if len(arrayB) == 1 :
+        divide_B = arrayB[0]
+    else :
+        for i in range(1,len(arrayB)) :
+            divide_B = min(divide_B,gcd(arrayB[i-1],arrayB[i]))
+
+    # 두 최대공약수 중 큰 값을 선택
+    answer = max(divide_A,divide_B)
+
+    # arrayB의 각 요소가 divide_A로 나누어 떨어지는지 확인
+    for i in arrayB :
+        if i%divide_A == 0 :
+            pivot_a = 0
             break
-        # k에서 현재 값(dic[i])을 뺌
-        k -= dic[i]
-        # 결과 값(answer)을 1 증가
-        answer +=1 
+        else : 
+            pivot_a = divide_A
 
-    return answer # 결과 반환
+    # arrayA의 각 요소가 divide_B로 나누어 떨어지는지 확인
+    for i in arrayA :
+        if i%divide_B == 0 :
+            answer = 0 
+            pivot_b = 0
+            break
+        else : 
+            pivot_b = divide_B
+
+    # 두 pivot 중 큰 값 선택
+    answer = max(pivot_a,pivot_b)
+    
+    return answer
