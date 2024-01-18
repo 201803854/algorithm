@@ -1,0 +1,27 @@
+def solution(order):
+    answer = 0  # 처리된 주문의 수를 저장한다.
+    container = []  # 컨테이너를 표현하는 빈 리스트
+    now = 0  # 현재 처리해야 할 주문의 인덱스
+
+    # 컨테이너를 처리하는 함수
+    def process_container():
+        nonlocal now, answer  # 외부 스코프의 변수를 참조하기 위해 nonlocal 키워드를 사용
+        # 컨테이너가 비어있지 않고, 컨테이너의 마지막 요소가 현재 처리해야 할 주문과 같을 때
+        while container and container[-1] == order[now]:
+            container.pop()  # 컨테이너에서 마지막 요소를 제거
+            now += 1  # 다음 주문으로 넘어감
+            answer += 1  # 처리된 주문의 수를 증가
+
+    # 주문의 각 요소에 대해
+    for i in range(1, len(order) + 1):
+        if i == order[now]:  # 만약 현재 요소가 현재 처리해야 하는 주문과 같다면
+            now += 1  # 다음 주문으로 넘어감
+            answer += 1  # 처리된 주문의 수를 증가
+        else:  # 현재 요소가 현재 처리해야 하는 주문과 다르다면
+            process_container()  # 컨테이너를 처리
+            container.append(i)  # 컨테이너에 현재 요소를 추가
+
+    # 남아있는 컨테이너를 처리
+    process_container()
+
+    return answer  # 처리된 주문의 수를 반환
