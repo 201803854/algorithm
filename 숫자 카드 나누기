@@ -1,23 +1,54 @@
-def solution(topping):
-    from collections import defaultdict   # defaultdict 라이브러리를 불러옵니다.
+def solution(arrayA, arrayB):
+    # 최대공약수를 구하는 함수
+    def gcd(x,y) :
+        while x%y != 0 :
+            temp = x%y
+            x = y
+            y = temp
+        return y
 
-    n = len(topping)  # 롤케이크에 토핑의 총 개수를 구합니다.
-    left_counts = [0] * (n+1)  # 왼쪽에서 오른쪽으로 롤케이크를 자르면서 토핑의 종류 수를 저장할 리스트를 초기화합니다.
-    right_counts = [0] * (n+1)  # 오른쪽에서 왼쪽으로 롤케이크를 자르면서 토핑의 종류 수를 저장할 리스트를 초기화합니다.
+    # 초기값 설정
+    answer = 0 
+    pivot_a = 0
+    pivot_b = 0
+    divide_A = float("inf")
+    divide_B = float("inf")
 
-    topping_dict = defaultdict(int)  # 토핑의 번호를 키로, 해당 토핑의 개수를 값으로 하는 딕셔너리를 초기화합니다.
-    for i in range(n):  # 왼쪽에서 오른쪽으로 롤케이크를 스캔합니다.
-        topping_dict[topping[i]] += 1  # 롤케이크의 i번째 위치에 있는 토핑의 개수를 1 증가시킵니다.
-        left_counts[i+1] = len(topping_dict)  # 롤케이크를 왼쪽에서 i+1번째 위치에서 자르면 왼쪽 조각에 있는 토핑의 종류 수를 저장합니다.
+    # arrayA의 모든 요소의 최대공약수를 구함
+    if len(arrayA) == 1 :
+        divide_A = arrayA[0]
+    else :
+        for i in range(1,len(arrayA)) :
+            divide_A = min(divide_A,gcd(arrayA[i-1],arrayA[i]))
 
-    topping_dict.clear()  # 딕셔너리를 초기화합니다.
-    for i in range(n-1, -1, -1):  # 오른쪽에서 왼쪽으로 롤케이크를 스캔합니다.
-        topping_dict[topping[i]] += 1  # 롤케이크의 i번째 위치에 있는 토핑의 개수를 1 증가시킵니다.
-        right_counts[i] = len(topping_dict)  # 롤케이크를 오른쪽에서 i번째 위치에서 자르면 오른쪽 조각에 있는 토핑의 종류 수를 저장합니다.
+    # arrayB의 모든 요소의 최대공약수를 구함
+    if len(arrayB) == 1 :
+        divide_B = arrayB[0]
+    else :
+        for i in range(1,len(arrayB)) :
+            divide_B = min(divide_B,gcd(arrayB[i-1],arrayB[i]))
 
-    answer = 0  # 롤케이크를 공평하게 자를 수 있는 위치의 개수를 저장할 변수를 초기화합니다.
-    for i in range(1, n):  # 롤케이크를 왼쪽에서 1번째 위치부터 오른쪽에서 1번째 위치까지 자릅니다.
-        if left_counts[i] == right_counts[i]:  # 롤케이크를 i번째 위치에서 자르면 양쪽 조각에 있는 토핑의 종류 수가 같으면
-            answer += 1  # 롤케이크를 공평하게 자를 수 있는 위치의 개수를 1 증가시킵니다.
+    # 두 최대공약수 중 큰 값을 선택
+    answer = max(divide_A,divide_B)
 
-    return answer  # 롤케이크를 공평하게 자를 수 있는 위치의 개수를 반환합니다.
+    # arrayB의 각 요소가 divide_A로 나누어 떨어지는지 확인
+    for i in arrayB :
+        if i%divide_A == 0 :
+            pivot_a = 0
+            break
+        else : 
+            pivot_a = divide_A
+
+    # arrayA의 각 요소가 divide_B로 나누어 떨어지는지 확인
+    for i in arrayA :
+        if i%divide_B == 0 :
+            answer = 0 
+            pivot_b = 0
+            break
+        else : 
+            pivot_b = divide_B
+
+    # 두 pivot 중 큰 값 선택
+    answer = max(pivot_a,pivot_b)
+    
+    return answer
