@@ -1,0 +1,42 @@
+from collections import deque
+
+def solution(queue1, queue2):
+    answer = 0  # 교환 횟수를 저장할 변수
+    queue1 = deque(queue1)  # queue1을 deque로 변환
+    queue2 = deque(queue2)  # queue2을 deque로 변환
+
+    S_1 = sum(queue1)  # queue1의 합
+    S_2 = sum(queue2)  # queue2의 합
+    SUM = S_1 + S_2  # 두 큐의 총 합
+
+    # 총 합이 홀수라면 교환을 통해 같게 만들 수 없음
+    if SUM % 2 != 0 :
+        return -1
+
+    # 각 큐에서 총 합의 절반만큼 뺀 값을 저장
+    left_1 = S_1 - SUM/2
+    left_2 = S_2 - SUM/2
+
+    # 교환 과정 실행
+    for i in range(len(queue1)*3) :
+        # 두 큐의 합이 같아졌다면 교환 종료
+        if left_1 == 0 or left_2 == 0 :
+            break
+
+        # queue1의 합이 더 크다면 queue1에서 queue2로 이동
+        if left_1 > left_2 :
+            left_1 -= queue1[0]  # 이동한 값만큼 차감
+            left_2 += queue1[0]  # 이동한 값만큼 추가
+            queue2.append(queue1.popleft())  # queue1에서 queue2로 이동
+            answer += 1  # 교환 횟수 증가
+        else :  # 반대의 경우도 동일하게 처리
+            left_1 += queue2[0]
+            left_2 -= queue2[0]
+            queue1.append(queue2.popleft())
+            answer += 1
+
+    # 교환 후에도 두 큐의 합이 같지 않다면 -1 반환
+    if left_1 != 0 or left_2 != 0 :
+        return -1
+    else :  # 두 큐의 합이 같다면 교환 횟수 반환
+        return answer
