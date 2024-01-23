@@ -1,0 +1,46 @@
+import math
+
+def solution(fees, records):
+    answer = []  # 결과를 담을 리스트 초기화
+    time_line = {}  # 자동차 번호를 키로, 출입 시간을 값으로 갖는 딕셔너리 초기화
+
+    # 시간을 분 단위로 변환하는 함수
+    def convert(time) :
+        change = time.split(':')
+        return int(change[0])* 60 + int(change[1])
+
+    # records를 순회하며 time_line 딕셔너리를 채워나갑니다.
+    for record in records :
+        try :
+            # 이미 키가 존재하면 시간을 추가
+            time_line[record.split()[1]].append(convert(record.split()[0]))
+        except :
+            # 키가 존재하지 않으면 새로운 키-값 쌍을 추가
+            time_line[record.split()[1]] = [convert(record.split()[0])]
+
+    # time_line 딕셔너리를 차량 번호 순으로 정렬
+    time_line = dict(sorted(time_line.items()))
+
+    # time_line 딕셔너리를 순회하며 주차 요금을 계산
+    for car,time in time_line.items() :
+        total = 0  # 주차 시간을 저장할 변수 초기화
+        if len(time) % 2 == 0 :  # 출입 기록이 짝수번이면
+            for i in range(len(time)-1,0,-2) :  # 역순으로 순회하며
+                total += time[i] - time[i-1]  # 주차 시간을 더함
+        else :  # 출입 기록이 홀수번이면
+            total += convert('23:59') - time[-1]  # 마지막 출입 기록에서 자정까지의 시간을 더함
+            
+            time.pop()  # 마지막 출입 기록 제거
+            for i in range(len(time)-1,0,-2) :
+                total += time[i] - time[i-1] 
+
+        # 기본 요금을 초과하는지 확인하고 요금 계산
+        if total <=fees[0] :
+            fee = fees[1]
+        else :
+            fee = fees[1] + math.ceil((total - fees[0]) / fees[2] )  * fees[3] 
+
+        # 계산된 요금을 결과 리스트에 추가
+        answer.append(fee)
+
+    return answer  # 결과 리스트 반환
