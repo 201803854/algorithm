@@ -1,0 +1,34 @@
+def solution(n, k):
+    answer = 0
+    def sosu(x) :
+        if x < 2 :
+            return False
+        for i in range(2, int(x**(1/2))+1) :
+            if x % i == 0 :
+                return False
+        return True
+    def convert(num,what) :
+        temp = ''
+        while num :
+            temp = str(num%what) + temp
+            num = num//what
+        return int(temp)
+    Prime = []
+    N = str(convert(n,k))  # 숫자를 문자열로 변환 후 리스트로 변환
+    start = 0
+    for i in range(len(N)) :
+        if N[i] == '0' :  # 문자열 '0'과 비교
+            if N[start:i]  and sosu(int(N[start:i])):  # start부터 i까지의 문자열이 빈 문자열이 아니며 소수인지 확인
+                
+                if '0' in str(int(N[start:i])) :
+                    start = i +1
+                    continue
+                if start == 0 :
+                    answer += 1
+                elif N[start-1] == '0' :
+                    answer += 1
+                start = i +1
+    if sosu(int(N[start:])):  # 마지막 부분이 소수인지 확인
+        answer += 1
+        Prime.append(int(N[start:]))
+    return answer
