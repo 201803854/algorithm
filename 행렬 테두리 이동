@@ -1,0 +1,36 @@
+def rotate(matrix, query):
+    sr, sc, er, ec = [x-1 for x in query]
+    temp = matrix[sr][sc]
+    min_val = temp
+
+    # 위쪽 테두리 이동
+    for i in range(sr, er):
+        matrix[i][sc], temp = matrix[i+1][sc], matrix[i][sc]
+        min_val = min(min_val, temp)
+
+    # 왼쪽 테두리 이동
+    for i in range(sc, ec):
+        matrix[er][i], temp = matrix[er][i+1], matrix[er][i]
+        min_val = min(min_val, temp)
+
+    # 아래쪽 테두리 이동
+    for i in range(er, sr, -1):
+        matrix[i][ec], temp = matrix[i-1][ec], matrix[i][ec]
+        min_val = min(min_val, temp)
+
+    # 오른쪽 테두리 이동
+    for i in range(ec, sc, -1):
+        matrix[sr][i], temp = matrix[sr][i-1], matrix[sr][i]
+        min_val = min(min_val, temp)
+
+    return matrix, min_val
+
+def solution(rows, columns, queries):
+    answer = []
+    graph = [[i*columns + j + 1 for j in range(columns)] for i in range(rows)]
+    
+    for query in queries :
+        graph, min_val = rotate(graph, query)
+        answer.append(min_val)
+        
+    return answer
