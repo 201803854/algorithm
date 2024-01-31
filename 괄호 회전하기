@@ -1,0 +1,31 @@
+# 괄호의 짝이 맞는지 확인하는 함수
+def is_matched(s):
+    stack = []  # 괄호를 담을 스택
+    pairs = {')': '(', ']': '[', '}': '{'}  # 짝을 이루는 괄호들
+    
+    # 문자열의 각 문자에 대하여
+    for char in s:
+        # 닫는 괄호라면
+        if char in pairs:
+            # 스택이 비어있거나, 스택의 마지막 괄호와 짝이 맞지 않다면
+            if not stack or stack[-1] != pairs[char]:
+                return False  # False 반환
+            stack.pop()  # 스택에서 괄호 제거
+        else:  # 여는 괄호라면
+            stack.append(char)  # 스택에 괄호 추가
+    
+    # 모든 괄호의 짝이 맞다면 스택은 비어있어야 함
+    return len(stack) == 0
+
+# 문자열을 회전시키며 괄호의 짝이 맞는지 확인하는 함수
+def solution(s):
+    answer = 0  # 괄호의 짝이 맞는 경우의 수
+    
+    # 문자열의 길이만큼 반복
+    for _ in range(len(s)):
+        # 괄호의 짝이 맞다면
+        if is_matched(s):
+            answer += 1  # answer 증가
+        s = s[1:] + s[0]  # 문자열 회전
+    
+    return answer  # 괄호의 짝이 맞는 경우의 수 반환
