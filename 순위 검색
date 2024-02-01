@@ -1,0 +1,40 @@
+from collections import defaultdict
+from itertools import combinations
+from bisect import bisect_left
+
+def solution(info, query):
+    info_dict = defaultdict(list)
+    
+    # 각 사용자의 정보를 처리
+    for user_info in info:
+        user_info = user_info.split()
+        score = int(user_info[-1])  # 점수
+        user_info = user_info[:-1]  # 그 외 정보
+        
+        # 각 사용자의 모든 정보 조합을 생성
+        for i in range(5):
+            for comb in combinations(user_info, i):
+                info_dict[''.join(comb)].append(score)
+    
+    # 각 정보를 정렬
+    for key in info_dict:
+        info_dict[key].sort()
+    
+    result = []
+    
+    # 각 쿼리를 처리
+    for q in query:
+        q = q.split()
+        score = int(q[-1])  # 점수
+        q = q[:-1]  # 그 외 정보
+        
+        # '-' 문자를 제거
+        q = [x for x in q if x != 'and' and x != '-']
+        
+        # 쿼리에 해당하는 사용자의 수를 이진 탐색으로 찾음
+        if ''.join(q) in info_dict:
+            result.append(len(info_dict[''.join(q)]) - bisect_left(info_dict[''.join(q)], score))
+        else:
+            result.append(0)
+    
+    return result
