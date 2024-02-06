@@ -1,0 +1,47 @@
+import string
+from itertools import combinations
+
+def solution(orders, course):
+    answer = []
+    count = []
+
+    dic = {}
+    orders.sort(key = lambda x : len(x))
+    
+    # 주문에서 가능한 모든 조합을 생성
+    for order in orders :
+        for i in course:
+            count.extend(list(combinations(order,i)))
+
+    # 생성한 조합의 발생 횟수를 계산
+    for i in count :
+        temp = list(i)
+        temp.sort()
+        i = tuple(temp)
+        try :
+            dic[i] += 1
+        except :
+            dic[i] = 1
+    
+    # 각 길이마다 가장 많이 발생한 조합을 찾음
+    result = {}
+    for key, value in dic.items():
+        length = len(key)
+        if value >= 2 :
+            if length not in result:
+                result[length] = [key, value]
+            else:
+                if value > result[length][1]:
+                    result[length] = [key, value]
+                elif value == result[length][1] :
+                    result[length].extend([key,value])
+    
+    # 결과를 문자열로 변환
+    for course_len, item in result.items() :
+        for i in range(0,len(item),2) :
+            answer.append(''.join(item[i]))
+
+    # 결과를 정렬
+    answer.sort()
+    
+    return answer
