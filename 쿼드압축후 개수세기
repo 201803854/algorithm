@@ -1,0 +1,27 @@
+zero_count = 0
+one_count = 0
+
+def solution(arr):
+    global zero_count, one_count
+    zero_count = 0
+    one_count = 0
+
+    def compress(x, y, n):
+        global zero_count, one_count
+        check = arr[x][y]
+        for i in range(x, x + n):
+            for j in range(y, y + n):
+                if check != arr[i][j]:  # 모든 원소가 같지 않다면 4분할
+                    compress(x, y, n // 2)  # 1사분면
+                    compress(x, y + n // 2, n // 2)  # 2사분면
+                    compress(x + n // 2, y, n // 2)  # 3사분면
+                    compress(x + n // 2, y + n // 2, n // 2)  # 4사분면
+                    return
+
+        if check == 0:  # 모든 원소가 0이라면 0 count
+            zero_count += 1
+        else:  # 모든 원소가 1이라면 1 count
+            one_count += 1
+
+    compress(0, 0, len(arr))
+    return [zero_count, one_count]
