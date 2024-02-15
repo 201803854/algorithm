@@ -1,0 +1,6 @@
+from collections import Counter
+import re
+
+def solution(s):
+    s = Counter(re.findall('\d+', s))
+    return [int(item) for item, _ in sorted(s.items(), key=lambda x: -x[1])]
