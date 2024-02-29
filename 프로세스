@@ -1,0 +1,28 @@
+from collections import deque
+
+def solution(priorities, location):
+    answer = 0
+    queue = deque()
+    prior = deque(priorities)
+    order = []
+
+    # 큐 초기화
+    for i in range(len(priorities)):
+        queue.append(i)
+
+    while queue:
+        x = queue.popleft()
+        if prior and max(prior) > priorities[x]:
+            # 우선순위가 더 높은 작업을 만나면 다시 큐의 오른쪽에 넣고 우선순위를 변경
+            queue.append(x)
+            temp = prior.popleft()
+            prior.append(temp)
+        else:
+            # 작업의 순서를 order 리스트에 추가하고 우선순위를 제거
+            order.append(x)
+            prior.popleft()
+
+    # 작업의 순서를 찾아서 반환
+    answer = order.index(location) + 1
+    print(order)
+    return answer
