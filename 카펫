@@ -1,0 +1,14 @@
+def solution(brown, yellow):
+    answer = []
+    for i in range(brown) :
+        # brown/2 + 2 - i는 가로 길이, i는 세로 길이를 의미합니다.
+        # 이 두 수의 곱이 전체 타일의 수 (노란색 타일 수 + 갈색 타일 수)와 같아야 합니다.
+        if (brown/2 + 2 - i) * i == yellow + brown :
+            # 조건이 맞는 경우, 세로 길이(i)를 answer 리스트에 추가합니다.
+            answer.append(i)
+    # 세로 길이를 찾지 못한 경우, 가로 길이와 세로 길이가 같다는 의미이므로 세로 길이를 두 번 추가합니다.
+    if len(answer) == 1 :
+        answer *= 2
+    # 가로 길이가 세로 길이보다 길거나 같아야 하므로, answer 리스트를 내림차순으로 정렬합니다.
+    answer.sort(reverse = True)
+    return answer
