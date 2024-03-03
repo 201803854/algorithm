@@ -1,0 +1,33 @@
+from itertools import combinations,permutations
+import math
+
+def solution(numbers):
+    # 소수를 판별하는 함수를 정의합니다.
+    def sosu(x) :
+        if x <= 1 :
+            return False
+        for i in range(2,int(math.sqrt(x))+1) :
+            # x가 i로 나누어떨어지면 소수가 아닙니다.
+            if x % i == 0 :
+                return False
+        return True
+
+    answer = 0
+    # 숫자 문자열을 리스트로 변환합니다.
+    numbers = list(numbers)
+    decimal = set()
+    
+    # 1부터 numbers의 길이까지의 모든 숫자 조합을 생성합니다.
+    for i in range(1,len(numbers)+1) :
+        a= permutations(numbers,i)
+        for j in a :
+            # 생성된 숫자 조합을 정수로 변환하여 decimal 집합에 추가합니다.
+            decimal.add(int(''.join(j)))
+    
+    # decimal 집합의 모든 원소를 소수 판별 함수에 넣어 소수가 맞는 경우 answer를 1씩 증가시킵니다.
+    for i in decimal :
+        if sosu(i) :
+            answer += 1
+    
+    # 소수의 개수를 반환합니다.
+    return answer
