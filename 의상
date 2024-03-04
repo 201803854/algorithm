@@ -1,0 +1,35 @@
+from functools import reduce
+
+def solution(clothes):
+    # 배열의 모든 원소를 곱하는 함수를 정의합니다.
+    def multifly(arr) :
+        return reduce(lambda x,y : x*y,arr)
+    
+    answer = 0
+    # 옷의 종류를 저장할 리스트를 선언합니다.
+    cloth_type = []
+    # 옷을 종류에 따라 정렬합니다.
+    clothes.sort(key = lambda x : x[1])
+    num = 0
+    # 현재 보고 있는 옷의 종류를 저장합니다.
+    now_cloth = clothes[0][1]
+    
+    # 모든 옷을 순회하면서 각 종류의 옷이 몇 개인지 계산합니다.
+    for cloth in clothes :
+        if cloth[1] != now_cloth :
+            # 현재 종류의 옷의 개수를 cloth_type에 추가합니다.
+            cloth_type.append(num+1)
+            num = 0    
+            now_cloth = cloth[1]
+        num += 1
+    # 마지막 종류의 옷의 개수를 cloth_type에 추가합니다.
+    cloth_type.append(num+1)
+    print(cloth_type)
+    
+    # 옷의 종류가 한 가지만 있는 경우, 옷의 개수가 경우의 수가 됩니다.
+    if len(cloth_type) == 1 :
+        answer = len(clothes)
+    # 옷의 종류가 두 가지 이상 있는 경우, 각 종류의 옷의 개수를 모두 곱한 값에서 1을 빼서 경우의 수를 구합니다.
+    else :
+        answer = multifly(cloth_type) - 1
+    return answer
