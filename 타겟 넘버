@@ -1,0 +1,16 @@
+def solution(numbers, target):
+    stack = [(0, 0)]  # 초기값 설정: (현재까지의 합, 현재 인덱스)
+    answer = 0
+
+    while stack:
+        current_sum, idx = stack.pop()  # 스택에서 값을 가져옴
+
+        if idx == len(numbers):  # 모든 숫자를 확인했을 경우
+            if current_sum == target:  # 합계가 타겟과 같다면
+                answer += 1  # 경우의 수를 1 증가
+        else:  # 아직 모든 숫자를 확인하지 않았을 경우
+            # 다음 숫자를 더하고 뺀 값을 스택에 추가
+            stack.append((current_sum + numbers[idx], idx + 1))
+            stack.append((current_sum - numbers[idx], idx + 1))
+
+    return answer
