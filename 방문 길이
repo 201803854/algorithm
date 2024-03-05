@@ -1,0 +1,45 @@
+from itertools import permutations
+
+def solution(dirs):
+    answer = 0
+    visited = []  # 방문한 경로를 저장할 리스트
+    final = set()  # 중복을 제거한 최종 경로를 저장할 집합
+    now = [0, 0]  # 현재 위치
+    moving = {'R':1, 'L': -1, 'U' :1, 'D' :-1}  # 이동 방향에 따른 좌표 변화
+
+    for move in dirs:  # 주어진 방향에 대해 반복
+        line = [tuple(now[:])]  # 현재 위치를 복사하여 line에 저장
+        flag = 0  # 경계를 넘어갔는지 여부를 확인하는 플래그
+
+        # 가로 방향으로 이동
+        if move == 'R' or move == 'L':
+            now[0] += moving[move]
+            # 경계를 넘어간 경우
+            if now[0] > 5 or now[0] < -5:
+                now[0] -= moving[move]  # 원래 위치로 되돌림
+                flag = 1  # 플래그 설정
+
+        # 세로 방향으로 이동
+        else:
+            now[1] += moving[move]
+            # 경계를 넘어간 경우
+            if now[1] > 5 or now[1] < -5:
+                now[1] -= moving[move]  # 원래 위치로 되돌림
+                flag = 1  # 플래그 설정
+
+        # 경계를 넘어가지 않은 경우
+        if flag == 0:
+            line.append(tuple(now[:]))  # 이동한 위치를 line에 추가
+            visited.append(tuple(line[:])) # 방문한 경로를 visited에 추가
+        else:
+            continue  # 경계를 넘어간 경우 다음 방향으로 이동
+
+    for line in visited:  # 방문한 경로에 대해 반복
+        k = permutations(line, 2)  # 가능한 모든 순열을 생성
+        k = list(k)
+        k.sort()  # 순열을 정렬
+        k = tuple(k)  # 순열을 튜플로 변환
+        final.add(k)  # 튜플을 final 집합에 추가
+    
+    answer = len(final)
+    return answer
