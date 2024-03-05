@@ -1,0 +1,39 @@
+from collections import deque
+
+def solution(s):
+    answer = len(s)  # 초기값으로 문자열의 길이를 설정
+    temp = []  # 임시 저장소
+    string = s  # 복사본 생성
+
+    # i는 압축 단위를 의미합니다.
+    for i in range(1, int(len(s)/2) + 1):  
+        s = string  # s를 초기화합니다.
+        length = len(s)  # 현재 문자열의 길이
+        temp = []  # temp 초기화
+
+        # 문자열 s를 i 단위로 잘라서 temp에 저장
+        while s:
+            temp.append(s[:i])
+            s = s[i:]
+
+        queue = deque(temp)
+        
+        # queue가 빌 때까지 반복
+        while queue:
+            count = 1  # 반복되는 문자열의 개수
+            x = queue.popleft()  # queue에서 문자열을 하나 꺼냄
+
+            # queue의 첫 번째 문자열이 x와 같다면
+            if queue and x == queue[0]:
+                length -= i  # length에서 i를 뺌
+                # queue의 첫 번째 문자열이 x와 같을 때까지 반복
+                while queue and x == queue[0]:
+                    count += 1  # count 증가
+                    x = queue.popleft()  # queue에서 문자열을 하나 꺼냄
+                    length -= i  # length에서 i를 뺌
+                length += i + len(str(count))  # length에 i와 count의 길이를 더함
+
+        # length와 answer 중 작은 값을 answer로 설정
+        answer = min(answer, length)
+
+    return answer  # 가장 짧은 압축 길이를 반환
