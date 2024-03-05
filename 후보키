@@ -1,0 +1,34 @@
+from itertools import combinations
+
+def solution(relation):
+    n_row = len(relation)  # 행의 수
+    n_col = len(relation[0])  # 열의 수
+
+    # 모든 가능한 속성 조합을 생성합니다.
+    # 각 조합은 속성의 인덱스로 표현됩니다.
+    candidates = []
+    for length in range(1, n_col + 1):
+        candidates.extend(combinations(range(n_col), length))
+
+    final = []
+    for keys in candidates:
+        # 각 튜플에 대해 해당 속성의 값만을 선택하여 리스트를 만듭니다.
+        # 이 리스트는 튜플로 변환하여 중복을 제거할 수 있게 합니다.
+        tmp = [tuple([item[key] for key in keys]) for item in relation]
+        # 만약 중복을 제거한 리스트의 길이가 전체 튜플의 개수와 같다면,
+        # 해당 속성의 조합은 후보 키입니다.
+        if len(set(tmp)) == n_row:
+            final.append(keys)
+
+    # 후보 키의 최소성을 보장하기 위해,
+    # 이미 확인한 후보 키를 저장하고,
+    # 새로운 조합이 이 후보 키의 부분 집합인지 확인합니다.
+    answer = set(final[:])
+    for i in range(len(final)):
+        for j in range(i+1, len(final)):
+            # 만약 한 후보 키가 다른 후보 키의 부분 집합이라면,
+            # 그 후보 키는 제거합니다.
+            if len(final[i]) == len(set(final[i]).intersection(set(final[j]))):
+                answer.discard(final[j])
+                
+    return len(answer)  # 후보 키의 개수를 반환합니다.
