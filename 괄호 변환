@@ -1,0 +1,30 @@
+def divide(p):
+    count = [0, 0] # '('와 ')'의 개수를 저장할 리스트
+    for i in range(len(p)):
+        if p[i] == '(':
+            count[0] += 1 # '('의 개수를 증가
+        else:
+            count[1] += 1 # ')'의 개수를 증가
+        if count[0] == count[1]: # '('와 ')'의 개수가 같아지면
+            return p[:i+1], p[i+1:] # 균형잡힌 괄호 문자열 u, v를 반환
+
+def is_correct(u):
+    stack = [] # 스택을 사용하여 괄호의 짝을 확인
+    for c in u:
+        if c == '(':
+            stack.append(c) # '('를 만나면 스택에 추가
+        else:
+            if not stack: # 스택이 비어있으면 짝이 맞지 않는 괄호
+                return False
+            stack.pop() # 짝이 맞는 괄호를 만나면 스택에서 제거
+    return True # 스택이 비어있으면 모든 괄호의 짝이 맞는 것
+
+def solution(p):
+    if not p: return "" # p가 빈 문자열이면 빈 문자열 반환
+    
+    u, v = divide(p) # 문자열 p를 두 균형잡힌 괄호 문자열 u, v로 분리
+    if is_correct(u): # u가 올바른 괄호 문자열이면
+        return u + solution(v) # u에 v를 재귀적으로 변환한 결과를 이어 붙여 반환
+    else: # u가 올바른 괄호 문자열이 아니면
+        # 새로운 문자열을 만들어 반환
+        return '(' + solution(v) + ')' + ''.join(['(' if c==')' else ')' for c in u[1:-1]])
