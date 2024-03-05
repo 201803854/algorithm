@@ -1,0 +1,11 @@
+def solution(skill, skill_trees):
+    answer = 0
+    for skill_tree in skill_trees:  # 각 스킬 트리에 대해 반복
+        check = []  # 스킬 트리에서 선행 스킬 순서에 맞는 스킬을 저장할 리스트
+        for skill_type in skill_tree:  # 스킬 트리의 각 스킬에 대해 반복
+            if skill_type in skill:  # 스킬이 선행 스킬 순서에 포함되는 경우
+                check.append(skill_type)  # check 리스트에 추가
+        making_skill = "".join(check)  # check 리스트를 문자열로 변환
+        if skill.startswith(making_skill):  # 만든 스킬이 선행 스킬 순서의 부분 문자열인 경우
+            answer += 1  # answer를 1 증가
+    return answer  # 가능한 스킬트리의 개수를 반환
