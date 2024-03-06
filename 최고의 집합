@@ -1,0 +1,15 @@
+def solution(n, s):
+    answer = []
+    remain = s%n
+    top = s - remain
+    
+    if s < n : 
+        return [-1]
+    else :
+        answer = [top/n]*n
+    i = 1
+    while remain != 0 :  
+        answer[-i] += 1
+        i += 1
+        remain -= 1
+    return answer
