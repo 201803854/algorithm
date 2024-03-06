@@ -1,0 +1,25 @@
+def solution(n, t, m, p):
+    # n진수로 변환하는 함수
+    def to_n_base(num, base):
+        convert_string = "0123456789ABCDEF"
+        if num < base:
+            return convert_string[num]
+        else:
+            quotient, remainder = divmod(num, base)
+            return to_n_base(quotient, base) + convert_string[remainder]
+
+    game = []  # 게임에서 말해야 하는 수를 저장할 리스트
+    answer = ""  # 최종적으로 말해야 하는 수를 저장할 문자열
+    i = 0
+    # t*m개의 수가 필요하므로 t*m개의 수가 저장될 때까지 반복
+    while len(game) < t*m :
+        # i를 n진수로 변환한 후, 각 자릿수를 game에 추가
+        game.extend(list(to_n_base(i,n)))
+        i+= 1
+    # t*m개 이상의 수가 저장되었을 경우, 필요한 만큼만 남기고 나머지는 삭제
+    game = game[:t*m]
+    # p번째부터 m개의 간격으로 수를 선택하여 answer에 추가
+    # join 함수를 사용하여 리스트를 문자열로 변환
+    answer = "".join(game[p-1::m])
+
+    return answer  # 최종적으로 말해야 하는 수를 반환
