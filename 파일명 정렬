@@ -1,0 +1,49 @@
+def solution(files):
+    answer = []  # 정렬된 파일명을 저장할 리스트
+    database = []  # 각 파일명의 HEAD, NUMBER, TAIL을 저장할 리스트
+
+    # 각 파일명에 대해
+    for file in files :
+        tmp = []   # 현재 파일명의 HEAD, NUMBER, TAIL을 저장할 리스트
+        string = ''  # HEAD 또는 TAIL을 저장할 문자열
+        number = ''  # NUMBER를 저장할 문자열
+        flag = 0  # 현재 문자가 HEAD, NUMBER, TAIL 중 어디에 속하는지 나타내는 플래그
+
+        # 파일명의 각 문자에 대해
+        for spell in file :
+            # 현재 문자가 숫자이고, 아직 NUMBER의 끝이 아니라면
+            if spell >= '0' and spell <= '9' and flag != 2 :
+                flag = 1
+                # NUMBER의 길이가 5가 되면 다음 문자는 TAIL로 처리
+                if len(number) == 5 :
+                    flag = 2
+                number += spell
+            else :
+                # 현재 문자가 숫자가 아니고, NUMBER의 끝이라면
+                if flag == 1 :
+                    tmp.append(string)  # HEAD를 tmp에 추가
+                    tmp.append(number)  # NUMBER를 tmp에 추가
+                    string = ''  # string을 초기화
+                    flag = 2
+                    string += spell
+                :
+                    string += spell
+
+        # 파일명이 HEAD와 NUMBER로만 이루어져 있을 경우
+        if len(tmp) == 0:
+            tmp.append(string)  # HEAD를 tmp에 추가
+            tmp.append(number)  # NUMBER를 tmp에 추가
+        else :
+            tmp.append(string)  # TAIL을 tmp에 추가
+        database.append(tmp)  # tmp를 database에 추가
+
+    # database를 HEAD의 알파벳 오름차순, NUMBER의 숫자 오름차순으로 정렬
+    database.sort(key = lambda x : (x[0].lower(),int(x[1])))
+
+    # database의 각 파일명을 문자열로 변환하여 database에 다시 저장
+    for index, file in enumerate(database) :
+        database[index] = ''.join(file)
+
+    answer = database  # answer에 정렬된 파일명을 저장
+
+    return answer  # 정렬된 파일명을 반환
