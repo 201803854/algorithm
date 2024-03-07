@@ -1,0 +1,22 @@
+import heapq
+
+def solution(n, works):
+    # 최대 힙(Max Heap)을 만들기 위해 각 원소를 음수로 변환
+    works = [-work for work in works]
+    # 리스트 works를 힙으로 변환
+    heapq.heapify(works)
+    
+    # n번 반복
+    for _ in range(n):
+        # 힙에서 가장 큰 원소를 꺼냄
+        work = heapq.heappop(works)
+        
+        # 원소가 0보다 작거나 같으면, 모든 일을 처리한 것이므로 종료
+        if work >= 0:
+            break
+
+        # 원소를 1 감소시킨 후 다시 힙에 넣음
+        heapq.heappush(works, work + 1)
+
+    # 각 원소의 제곱을 더하여 반환
+    return sum([work ** 2 for work in works])
