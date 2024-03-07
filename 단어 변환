@@ -1,0 +1,27 @@
+def solution(begin, target, words):
+    # 두 단어가 한 글자만 다른지 확인하는 함수
+    def is_one_diff(word1, word2):
+        return sum([char1 != char2 for char1, char2 in zip(word1, word2)]) == 1
+
+    answer = [float('inf')]
+
+    # target이 words에 없는 경우 0을 반환
+    if target not in words:
+        return 0
+
+    def dfs(current, depth):
+        # 현재 단어가 target과 같다면 answer 업데이트
+        if current == target:
+            answer[0] = min(answer[0], depth)
+            return
+
+        for i in range(len(words)):
+            if visited[i] == 0 and is_one_diff(current, words[i]):
+                visited[i] = 1
+                dfs(words[i], depth + 1)
+                visited[i] = 0
+
+    visited = [0] * len(words)
+    dfs(begin, 0)
+
+    return 0 if answer[0] == float('inf') else answer[0]  # 변환할 수 없는 경우 0을 반환
