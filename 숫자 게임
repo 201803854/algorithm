@@ -1,0 +1,24 @@
+import heapq  # heapq 모듈을 불러옵니다. heapq는 힙 자료구조를 제공하며, 이는 우선순위 큐를 구현하는 데 사용됩니다.
+
+def solution(A, B):
+    answer = 0  # 최종 결과를 저장할 변수를 초기화합니다.
+    
+    heapq.heapify(A)  # 리스트 A를 최소 힙으로 변환합니다.
+    heapq.heapify(B)  # 리스트 B를 최소 힙으로 변환합니다.
+    
+    while B :  # 리스트 B가 비어있지 않는 동안 반복합니다.
+        x = heapq.heappop(A)  # 힙 A에서 가장 작은 원소를 꺼내어 x에 저장합니다.
+        y = heapq.heappop(B)  # 힙 B에서 가장 작은 원소를 꺼내어 y에 저장합니다.
+        
+        while True :  # 무한 반복문을 시작합니다.
+            if y > x :  # 만약 y가 x보다 크다면,
+                answer += 1  # 결과값에 1을 더하고,
+                break  # 무한 반복문을 종료합니다.
+                
+            else :  # 그렇지 않다면,
+                if B :  # 만약 리스트 B가 비어있지 않다면,
+                    y = heapq.heappop(B)  # 힙 B에서 가장 작은 원를 다시 꺼내어 y에 저장합니다.
+                else :  # 만약 리스트 B가 비어있다면,
+                    break  # 무한 반복문을 종료합니다.
+            
+    return answer  # 최종 결과를 반환합니다.
