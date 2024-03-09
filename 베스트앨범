@@ -1,0 +1,29 @@
+from collections import Counter
+def solution(genres, plays):
+    final = []  # 각 장르별로 총 재생 횟수와 재생 횟수가 가장 많은 두 곡의 고유 번호를 저장할 리스트
+    answer = []  # 최종 결과를 저장할 리스트
+    count = {}  # 각 장르별로 곡의 고유 번호와 재생 횟수를 저장할 딕셔너리
+    i = 0
+    for genre, play in zip(genres, plays):  # 장르와 재생 횟수를 순회
+        try:
+            count[genre].append([i, play])  # 해당 장르가 딕셔너리에 이미 있으면 곡의 고유 번호와 재생 횟수 추가
+        except:
+            count[genre] = [[i, play]]  # 해당 장르가 딕셔너리에 없으면 새로운 리스트를 생성하여 곡의 고유 번호와 재생 횟수를 저장
+        i += 1
+    for genre, statistics in count.items():  # 장르와 해당 장르의 음악 정보를 순회
+        total = 0
+        for num in statistics:  # 각 장르의 음악 정보를 순회
+            total += num[1]  # 총 재생 횟수를 계산
+        statistics.sort(key = lambda x : -x[1])  # 재생 횟수가 많은 순서로 정렬
+        if len(statistics) > 1:  # 장르에 속한 음악이 두 곡 이상이면
+            final.append([total, statistics[0][0], statistics[1][0]])  # 총 재생 횟수와 가장 많이 재생된 두 곡의 고유 번호를 'final' 리스트에 추가
+        else:  # 장르에 속한 음악이 한 곡이면
+            final.append([total, statistics[0][0]])  # 총 재생 횟수와 그 곡의 고유 번호를 'final' 리스트에 추가
+    final.sort(key = lambda x : -x[0])  # 총 재생 횟수가 많은 장르부터 정렬
+    for i in final:  # 정렬된 장르 정보를 순회
+        if len(i) > 2:  # 장르에 속한 음악이 두 곡 이상이면
+            answer.append(i[1])  # 가장 많이 재생된 곡의 고유 번호를 'answer' 리스트에 추가
+            answer.append(i[2])  # 두 번째로 많이 재생된 곡의 고유 번호를 'answer' 리스트에 추가
+        else:  # 장르에 속한 음악이 한 곡이면
+            answer.append(i[1])  # 그 곡의 고유 번호를 'answer' 리스트에 추가
+    return answer  # 결과 반환
