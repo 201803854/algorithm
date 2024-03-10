@@ -1,0 +1,22 @@
+from collections import defaultdict
+
+def solution(gems):
+    gem_types = len(set(gems))  # 보석의 종류 수
+    gem_dict = defaultdict(int)
+    start, end = 0, 0
+    answer = [0, len(gems)-1]  # 가능한 최대 구간으로 초기 설정
+    
+    while end < len(gems):
+        gem_dict[gems[end]] += 1
+        
+        while len(gem_dict) == gem_types:  # 모든 종류의 보석이 포함된 경우
+            if end - start < answer[1] - answer[0]:  # 더 짧은 구간을 찾은 경우
+                answer = [start, end]
+            gem_dict[gems[start]] -= 1
+            if gem_dict[gems[start]] == 0:
+                del gem_dict[gems[start]]
+            start += 1
+        
+        end += 1
+    
+    return [answer[0]+1, answer[1]+1]  # 문제의 요구사항에 맞게 인덱스 조정
