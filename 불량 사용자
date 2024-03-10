@@ -1,0 +1,21 @@
+from collections import defaultdict
+
+def solution(user_id, banned_id):
+    possible = defaultdict(list)
+    for i, ban in enumerate(banned_id):
+        for user in user_id:
+            if len(ban) == len(user) and all(b == u or b == '*' for b, u in zip(ban, user)):
+                possible[i].append(user)
+
+    visited = set()
+
+    def dfs(idx, chosen):
+        if idx == len(banned_id):
+            visited.add(tuple(sorted(chosen)))  # 정렬하여 중복 방지
+            return
+        for user in possible[idx]:
+            if user not in chosen:
+                dfs(idx + 1, chosen + [user])
+
+    dfs(0, [])
+    return len(visited)
