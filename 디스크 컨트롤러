@@ -1,0 +1,31 @@
+import heapq
+
+def solution(jobs):
+    # 작업들을 요청 시간에 따라 정렬
+    jobs.sort()
+    # 현재 시간
+    current_time = 0
+    # 총 소요 시간
+    total_time = 0
+    # 대기 목록
+    wait_heap = []
+    divide = len(jobs)
+    while jobs or wait_heap:
+        # 현재 시간 이하로 요청된 작업들을 힙에 추가
+        while jobs and jobs[0][0] <= current_time:
+            start, length = jobs.pop(0)
+            heapq.heappush(wait_heap, (length, start))
+        
+        if wait_heap:
+            # 대기 목록에서 작업을 하나 꺼냄
+            length, start = heapq.heappop(wait_heap)
+            current_time += length
+            total_time += current_time - start
+        else:
+            # 대기 목록이 비어있으면, 다음 작업의 시작 시간으로 시간을 이동
+            if jobs:
+                current_time = jobs[0][0]
+    
+    # 모든 작업을 완료하는데 걸린 총 시간을 작업의 수로 나누어 평균 계산
+    answer = total_time // divide
+    return answer
