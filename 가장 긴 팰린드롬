@@ -1,0 +1,19 @@
+def solution(s):
+    answer = 1
+    for i in range(1, len(s)):
+        # 홀수 길이 팰린드롬 탐색
+        j = 1
+        candidate_odd = 1
+        while i - j >= 0 and i + j < len(s) and s[i-j] == s[i + j]:
+            candidate_odd += 2
+            j += 1
+        answer = max(answer, candidate_odd)
+        
+        # 짝수 길이 팰린드롬 탐색
+        k = 0
+        candidate_even = 0
+        while i - k >= 0 and i + k + 1 < len(s) and s[i-k] == s[i + k + 1]:
+            candidate_even += 2
+            k += 1
+        answer = max(answer, candidate_even)
+    return answer
