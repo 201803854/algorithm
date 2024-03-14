@@ -1,0 +1,61 @@
+from collections import deque
+
+def solution(n, t, m, timetable):
+    # n: 셔틀 운행 횟수, t: 셔틀 운행 간격(분), m: 최대 승객 수, timetable: 크루 도착 시간
+    answer = 0
+
+    # 시간 문자열을 분으로 변환하는 함수
+    def convert_time(time):
+        time = time.split(":")
+        return int(time[0]) * 60 + int(time[1])
+
+    # 분을 시간 문자열로 변환하는 함수
+    def time_convert(time):
+        hour = time // 60
+        minute = time - hour * 60
+        if hour < 10:
+            hour = "0" + str(hour)
+        if minute < 10:
+            minute = "0" + str(minute)
+        return "%s:%s" % (hour, minute)
+
+    # timetable의 모든 시간을 분으로 변환하고 정렬
+    timetable = list(map(lambda x: convert_time(x), timetable))
+    timetable.sort()
+
+    # 대기열 생성
+    queue = deque(timetable)
+
+    # 첫 배차 전에 모든 크루가 도착한 경우, 마지막 배차 시간에 도착
+    if m > len(timetable) or queue[0] > (n-1) * t + 540:
+        answer = time_convert((n-1) * t + 540)
+        return answer
+    else:
+        bus_count = 0
+        # 각 셔틀버스 운행 시간에 대해
+        for bus in range(540, 540 + t * (n-1) + 1, t):
+            print(bus)
+            # 대기열이 비어있고, 배차 횟수가 남았다면 즉시 마지막 배차 시간 반환
+            if not queue:
+                if bus_count < n:
+                    answer = (n-1) * t + 540
+                    break
+                else:
+                    answer = bus
+                    break
+            bus_count += 1
+            count = 0
+            # 해당 배차 시간에 탑승할 수 있는 승객을 대기열에서 제거
+            while queue and queue[0] <= bus and count < m:
+                crew = queue.popleft()
+                count += 1
+            # 마지막 셔틀버스인 경우
+            if bus_count == n:
+                if count == m:
+                    answer = crew - 1  # 마지막으로 탑승한 승객보다 1분 일찍 도착
+                else:
+                    answer = bus  # 셔틀버스 시간에 맞춰 도착
+
+    # 최종 결정된 시간을 문자열로 변환하여 반환
+    answer = time_convert(answer)
+    return answer
