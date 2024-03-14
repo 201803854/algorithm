@@ -1,0 +1,29 @@
+from collections import deque
+
+def solution(board):
+    n = len(board)
+    directions = [(1, 0), (0, 1), (-1, 0), (0, -1)] # 이동 가능한 방향
+    cost_board = [[[float('inf')] * 4 for _ in range(n)] for _ in range(n)] # 각 칸에 도달하는 최소 비용 저장
+
+    queue = deque([(0, 0, -1, 0)]) # 시작점, 초기 방향(-1은 시작점을 의미), 비용
+
+    while queue:
+        x, y, prev_dir, cost = queue.popleft()
+
+        if board[x][y] == 1: # 벽인 경우 이동 불가
+            continue
+
+        for i, (dx, dy) in enumerate(directions):
+            nx, ny = x + dx, y + dy
+            # 보드 범위 내에 있고, 벽이 아닌 경우
+            if 0 <= nx < n and 0 <= ny < n and board[nx][ny] == 0:
+                new_cost = cost + 100 if i == prev_dir or prev_dir == -1 else cost + 600
+                if cost_board[nx][ny][i] > new_cost:
+                    cost_board[nx][ny][i] = new_cost
+                    queue.append((nx, ny, i, new_cost))
+    print(cost_board)
+    return min(cost_board[n-1][n-1]) # 도착점에 도달하는 최소 비용
+
+# 예시
+board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+print(solution(board))
