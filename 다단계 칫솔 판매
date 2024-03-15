@@ -1,0 +1,30 @@
+from collections import defaultdict
+
+def solution(enroll, referral, seller, amount):
+    pyramid = defaultdict(lambda: "")
+    earn = defaultdict(int)
+    
+    # 판매원과 그들의 추천인을 매핑
+    for e, r in zip(enroll, referral):
+        pyramid[e] = r
+    
+    # 판매 실적에 따른 수익 계산 및 추천인에게 수익 분배
+    for s, a in zip(seller, amount):
+        current = s
+        profit = a * 100
+        while current != "-":
+            # 수익의 10%를 계산
+            to_parent = profit // 10
+            # 자신이 가질 수익
+            earn[current] += profit - to_parent
+            # 다음 추천인으로 이동
+            current = pyramid[current]
+            # 추천인에게 분배할 수익을 업데이트
+            profit = to_parent
+            # 10% 수익이 1보다 작을 경우 분배 중단
+            if profit < 1:
+                break
+    
+    # 결과 리스트 준비
+    answer = [earn[e] for e in enroll]
+    return answer
