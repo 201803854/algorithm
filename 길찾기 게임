@@ -1,0 +1,80 @@
+import sys
+sys.setrecursionlimit(10000)  # 재귀 깊이 제한을 10,000으로 설정
+
+class Node :
+    def __init__(self,index,x) :
+        self.x = x  # 노드의 x 좌표
+        self.index = index  # 노드의 인덱스 (노드 식별자)
+        self.left = None  # 왼쪽 자식 노드
+        self.right = None  # 오른쪽 자식 노드
+
+class Binary() :
+    def __init__(self) :
+        self.root = None  # 이진 트리의 루트 노드
+
+    def find(self, current, next_node):
+        # next_node를 적절한 위치에 삽입하는 메소드
+        if current.x < next_node.x:
+            if current.right:
+                self.find(current.right, next_node)
+            else:
+                current.right = next_node
+        else:
+            if current.left:
+                self.find(current.left, next_node)
+            else:
+                current.left = next_node
+
+    def insert(self, node):
+        # 노드를 트리에 삽입하는 메소드
+        if self.root:
+            self.find(self.root, node)
+        else:
+            self.root = node
+
+    def preorder(self,node,answer) :
+        # 전위 순회 메소드
+        if node != None :
+            answer.append(node.index)
+            if node.left :
+                self.preorder(node.left,answer)
+            if node.right :
+                self.preorder(node.right,answer)
+
+    def postorder(self,node,answer) :
+        # 후위 순회 메소드
+        if node != None :
+            if node.left :
+                self.postorder(node.left,answer)
+            if node.right :
+                self.postorder(node.right,answer)
+            answer.append(node.index)
+        
+def solution(nodeinfo):
+    preorder = []  # 전위 순회 결과를 저장할 리스트
+    postorder = []  # 후위 순회 결과를 저장할 리스트
+    answer = []  # 최종 결과를 저장할 리스트
+    
+    # 각 노드에 인덱스 추가
+    for i, node in enumerate(nodeinfo):
+        node.append(i + 1) 
+    nodeinfo.sort(key = lambda x : -x[1])  # y 좌표에 따라 노드 정보 정렬 (내림차순)
+    
+    Tree = Binary()  # 이진 트리 객체 생성
+    N = Node(nodeinfo[0][2],nodeinfo[0][0])  # 루트 노드 생성
+    Tree.root = N  # 루트 노드 설정
+    
+    # 나머지 노드들을 트리에 삽입
+    for node in nodeinfo[1:] :
+        N_next = Node(node[2],node[0])
+        Tree.insert(N_next)
+    
+    # 전위 순회 및 후위 순회 수행
+    Tree.preorder(Tree.root,preorder)
+    Tree.postorder(Tree.root,postorder)
+    
+    # 결과 리스트에 추가
+    answer.append(preorder)
+    answer.append(postorder)
+    
+    return answer
