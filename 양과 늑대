@@ -1,0 +1,25 @@
+def solution(info, edges):
+    graph = [[] for _ in range(len(info))]
+    for a, b in edges:
+        graph[a].append(b)
+    
+    max_sheep = 0
+    
+    def dfs(node, sheep, wolf, next_nodes):
+        nonlocal max_sheep
+        if info[node] == 0:
+            sheep += 1
+        else:
+            wolf += 1
+        if sheep <= wolf:
+            return
+        max_sheep = max(max_sheep, sheep)
+        
+        for next_node in list(next_nodes):
+            next_nodes.remove(next_node)
+            dfs(next_node, sheep, wolf, next_nodes + graph[next_node])
+            next_nodes.append(next_node)
+    
+    dfs(0, 0, 0, graph[0])
+    
+    return max_sheep
