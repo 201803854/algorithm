@@ -1,0 +1,30 @@
+from collections import deque
+def solution(bandage, health, attacks):
+    # 초기 설정
+    attacks = deque(attacks)  # 공격 정보(시간, 공격력)를 담고 있는 큐입니다.
+    max_health = health  # 최대 체력을 저장합니다.
+    attack = attacks.popleft()  # 첫 번째 공격 정보를 가져옵니다.
+    count = -1  # 밴드 사용 주기를 카운트하는 변수입니다. 
+
+    # 시뮬레이션 시작
+    for time in range(attacks[-1][0] + 1):  # 가장 마지막 공격이 끝난 시간까지 반복합니다.
+        if time == attack[0]:  # 현재 시간이 공격 시간과 일치하면
+            health -= attack[1]  # 체력에서 공격력 만큼 감소시킵니다.
+            count = 0  # 밴드 사용 카운트를 초기화합니다.
+            if health <= 0:  # 체력이 0 이하가 되면 게임 오버입니다.
+                return -1
+            if attacks:  # 남은 공격이 있다면 다음 공격으로 넘어갑니다.
+                attack = attacks.popleft()
+            else:  # 더 이상 공격이 없다면 현재 체력을 반환합니다.
+                return health
+        else:  # 공격 시간이 아닌 경우
+            if health == max_health:  # 체력이 최대 체력이라면 밴드를 사용할 필요가 없습니다.
+                count += 1
+                continue
+            else:  # 체력이 최대 체력이 아니라면
+                health = min(max_health, health + bandage[1])  # 첫 번째 밴드를 사용하여 체력을 회복합니다.
+                count += 1
+                if count == bandage[0]:  # 밴드 사용 주기에 도달하면
+                    health = min(max_health, health + bandage[2])  # 두 번째 밴드를 사용하여 추가 체력을 회복합니다.
+                    count = 0  # 밴드 사용 카운트를 초기화합니다.
+    return answer  # 최종적으로 남은 체력을 반환합니다. 현재 로직 상으로는 사용되지 않는 값입니다.
